@@ -1,222 +1,126 @@
-import React, { useState } from 'react';
-import { Menu, X, ChevronRight, Mail, MessageCircle, ExternalLink } from 'lucide-react';
-
-const NavLink = ({ href, children }) => (
-  <a href={href} className="px-4 py-2 text-gray-600 hover:text-blue-600">
-    {children}
-  </a>
-);
-
-const Section = ({ title, children, className = "", id }) => (
-  <section id={id} className={`py-12 ${className}`}>
-    <div className="max-w-4xl mx-auto px-4">
-      <h2 className="text-3xl font-bold text-gray-900 mb-6">{title}</h2>
-      {children}
-    </div>
-  </section>
-);
-
-const Card = ({ title, children }) => (
-  <div className="bg-white p-6 rounded-lg shadow-sm">
-    <h3 className="text-xl font-bold text-gray-900 mb-4">{title}</h3>
-    {children}
-  </div>
-);
-
-const Button = ({ href, children, variant = "primary", onClick }) => {
-  const baseStyles = "inline-flex items-center px-4 py-2 rounded-md font-medium";
-  const styles = variant === "primary" 
-    ? "bg-blue-600 text-white hover:bg-blue-700" 
-    : "bg-gray-100 text-gray-900 hover:bg-gray-200";
-
-  const props = onClick 
-    ? { onClick, type: "button" } 
-    : { href, rel: "noopener noreferrer" };
-
-  return React.createElement(
-    onClick ? 'button' : 'a',
-    { className: `${baseStyles} ${styles}`, ...props },
-    <>
-      {children}
-      <ChevronRight className="ml-2 h-4 w-4" />
-    </>
-  );
-};
-
-const QuizWebsite = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [formStatus, setFormStatus] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFormStatus('Since this is a static site, the form is not functional. Please use the email link instead.');
-    setTimeout(() => setFormStatus(''), 5000);
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <img 
-                src="SHOWDOWN QUIZ.png" 
-                alt="Showdown Quiz Logo" 
-                className="h-12 w-auto"
-              />
-              <span className="text-xl font-bold text-gray-900 ml-2">Quiz Informals</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showdown Quiz Informals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Poppins', sans-serif; }
+        .gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        .hover-up { transition: transform 0.2s; }
+        .hover-up:hover { transform: translateY(-5px); }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Nav -->
+    <nav class="fixed w-full glass shadow z-50">
+        <div class="max-w-6xl mx-auto px-4 flex justify-between items-center h-20">
+            <div class="flex items-center gap-3">
+                <img src="SHOWDOWN QUIZ.png" alt="Logo" class="h-16 w-16 rounded-full hover:scale-105 transition">
+                <span class="text-2xl font-bold text-blue-600">Quiz Informals</span>
             </div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-4">
-              <NavLink href="#home">Home</NavLink>
-              <NavLink href="#about">About</NavLink>
-              <NavLink href="#services">Services</NavLink>
-              <NavLink href="#contact">Contact</NavLink>
+            <div class="hidden md:flex gap-8">
+                <a href="#home" class="text-gray-600 hover:text-blue-600">Home</a>
+                <a href="#about" class="text-gray-600 hover:text-blue-600">About</a>
+                <a href="#services" class="text-gray-600 hover:text-blue-600">Services</a>
+                <a href="#contact" class="text-gray-600 hover:text-blue-600">Contact</a>
             </div>
-
-            {/* Mobile menu button */}
-            <button 
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden text-gray-500 hover:text-gray-600"
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-          </div>
-
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <div className="md:hidden py-2">
-              <NavLink href="#home">Home</NavLink>
-              <NavLink href="#about">About</NavLink>
-              <NavLink href="#services">Services</NavLink>
-              <NavLink href="#contact">Contact</NavLink>
-            </div>
-          )}
         </div>
-      </nav>
+    </nav>
 
-      {/* Hero Section */}
-      <section id="home" className="bg-white">
-        <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Welcome to Showdown Quiz Informals
-          </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Join our community of quiz enthusiasts and embrace the joy of learning through interactive quizzes
-          </p>
-          <div className="flex flex-col md:flex-row justify-center gap-4">
-            <Button href="#services">Explore Services</Button>
-            <Button href="#contact" variant="secondary">Join Community</Button>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <Section title="Our Story" id="about" className="bg-gray-50">
-        <div className="text-lg text-gray-600">
-          <p className="mb-4">
-            Showdown Quiz Informals was born during the unprecedented times of the COVID-19 pandemic when the world shifted to virtual spaces. Founded by Aadil Muhammed Syed, what began as a single event titled "Showdown in Lockdown" garnered overwhelming response and enthusiasm from participants.
-          </p>
-          <p>
-            This initiative has naturally evolved into a sustained platform for knowledge sharing and intellectual engagement, bringing together quiz enthusiasts from various backgrounds.
-          </p>
-        </div>
-      </Section>
-
-      {/* Services Section */}
-      <Section title="What We Offer" id="services">
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card title="WhatsApp Group Quizzes">
-            <p className="text-gray-600 mb-4">
-              Join our active WhatsApp community for regular quiz sessions, daily facts, and engaging discussions.
-            </p>
-            <Button href="#contact">
-              Join Group <MessageCircle className="ml-2 h-4 w-4" />
-            </Button>
-          </Card>
-
-          <Card title="Quiz Archive">
-            <p className="text-gray-600 mb-4">
-              Access our comprehensive collection of past quizzes, questions, and materials for learning and practice.
-            </p>
-            <Button href="https://drive.google.com/drive/folders/1pYYCa5DifBvF9quUmQf_uJcvekNQmnqr?usp=sharing">
-              Access Archive <ExternalLink className="ml-2 h-4 w-4" />
-            </Button>
-          </Card>
-        </div>
-      </Section>
-
-      {/* Contact Section */}
-      <Section title="Get in Touch" id="contact" className="bg-gray-50">
-        <div className="grid md:grid-cols-2 gap-8">
-          <div>
-            <h3 className="text-xl font-bold mb-4">Contact Information</h3>
-            <div className="space-y-4">
-              <p className="flex items-center text-gray-600">
-                <Mail className="h-5 w-5 mr-2" />
-                Email us for inquiries
-              </p>
-              <p className="flex items-center text-gray-600">
-                <MessageCircle className="h-5 w-5 mr-2" />
-                Join our WhatsApp community
-              </p>
+    <!-- Hero -->
+    <section id="home" class="gradient min-h-screen flex items-center">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-5xl font-bold text-white mb-6">Welcome to Showdown Quiz Informals</h1>
+            <p class="text-xl text-blue-100 mb-8">Join our community of quiz enthusiasts</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#services" class="px-6 py-3 bg-white text-blue-600 rounded-full font-bold hover:bg-blue-50">
+                    Explore Services
+                </a>
+                <a href="#contact" class="px-6 py-3 bg-blue-700 text-white rounded-full font-bold hover:bg-blue-600">
+                    Join Community
+                </a>
             </div>
-          </div>
-          
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-              <input 
-                type="text" 
-                id="name" 
-                required
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-              <input 
-                type="email" 
-                id="email" 
-                required
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-              />
-            </div>
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-              <textarea 
-                id="message" 
-                rows="4" 
-                required
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-              ></textarea>
-            </div>
-            <Button onClick={handleSubmit}>Send Message</Button>
-            {formStatus && (
-              <p className="text-sm text-gray-600 mt-2">{formStatus}</p>
-            )}
-          </form>
         </div>
-      </Section>
+    </section>
 
-      {/* Footer */}
-      <footer className="bg-white">
-        <div className="max-w-6xl mx-auto px-4 py-12">
-          <div className="text-center text-gray-500">
-            <p>© 2024 Showdown Quiz Informals. All rights reserved.</p>
-            <p className="mt-2 text-sm">Founded during COVID-19 lockdown • Relaunched 2024</p>
-          </div>
+    <!-- About -->
+    <section id="about" class="py-20">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-8">Our Story</h2>
+            <div class="glass p-8 rounded-2xl shadow-xl">
+                <p class="text-lg text-gray-600">
+                    Showdown Quiz Informals was born during the COVID-19 pandemic. Founded by Aadil Muhammed Syed, what began as "Showdown in Lockdown" evolved into a sustained initiative of knowledge sharing and intellectual engagement.
+                </p>
+            </div>
         </div>
-      </footer>
-    </div>
-  );
-};
+    </section>
 
-export default QuizWebsite;
+    <!-- Services -->
+    <section id="services" class="py-20 bg-gray-100">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">What We Offer</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- WhatsApp -->
+                <div class="glass p-8 rounded-2xl hover-up">
+                    <h3 class="text-2xl font-bold mb-4">WhatsApp Group Quizzes</h3>
+                    <p class="text-gray-600 mb-6">Join our active community for regular quiz sessions and daily facts.</p>
+                    <a href="#contact" class="inline-flex px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-500">
+                        Join Group
+                    </a>
+                </div>
+                <!-- Archive -->
+                <div class="glass p-8 rounded-2xl hover-up">
+                    <h3 class="text-2xl font-bold mb-4">Quiz Archive</h3>
+                    <p class="text-gray-600 mb-6">Access our collection of past quizzes and materials.</p>
+                    <a href="https://drive.google.com/drive/folders/1pYYCa5DifBvF9quUmQf_uJcvekNQmnqr?usp=sharing" 
+                       class="inline-flex px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-500"
+                       target="_blank">Access Archive</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-20">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Get in Touch</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6">Contact Info</h3>
+                    <div class="space-y-4 text-gray-600">
+                        <p>📧 Email us for inquiries</p>
+                        <p>💬 Join our WhatsApp community</p>
+                    </div>
+                </div>
+                <form class="glass p-8 rounded-2xl space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Name</label>
+                        <input type="text" class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Email</label>
+                        <input type="email" class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Message</label>
+                        <textarea rows="4" class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    <button class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 font-semibold">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gradient py-12 text-center">
+        <p class="text-white/90">© 2024 Showdown Quiz Informals. All rights reserved.</p>
+        <p class="text-sm text-white/70 mt-2">Founded during COVID-19 lockdown • Relaunched 2024</p>
+    </footer>
+</body>
+</html>
