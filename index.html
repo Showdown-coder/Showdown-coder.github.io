@@ -2,58 +2,74 @@ import React, { useState } from 'react';
 import { Menu, X, ChevronRight, Mail, MessageCircle, ExternalLink } from 'lucide-react';
 
 const NavLink = ({ href, children }) => (
-  <a href={href} className="text-gray-600 hover:text-blue-600 transition-colors">
+  <a href={href} className="px-4 py-2 text-gray-600 hover:text-blue-600">
     {children}
   </a>
 );
 
-const Section = ({ title, children, className = "" }) => (
-  <div className={`py-12 ${className}`}>
+const Section = ({ title, children, className = "", id }) => (
+  <section id={id} className={`py-12 ${className}`}>
     <div className="max-w-4xl mx-auto px-4">
       <h2 className="text-3xl font-bold text-gray-900 mb-6">{title}</h2>
       {children}
     </div>
-  </div>
+  </section>
 );
 
 const Card = ({ title, children }) => (
-  <div className="bg-white p-6 rounded-lg shadow-md">
-    <h3 className="text-xl font-semibold text-gray-900 mb-4">{title}</h3>
+  <div className="bg-white p-6 rounded-lg shadow-sm">
+    <h3 className="text-xl font-bold text-gray-900 mb-4">{title}</h3>
     {children}
   </div>
 );
 
-const Button = ({ href, children, variant = "primary" }) => {
-  const baseStyles = "inline-flex items-center px-4 py-2 rounded-md transition-colors font-medium";
-  const variants = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
-    secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200"
-  };
+const Button = ({ href, children, variant = "primary", onClick }) => {
+  const baseStyles = "inline-flex items-center px-4 py-2 rounded-md font-medium";
+  const styles = variant === "primary" 
+    ? "bg-blue-600 text-white hover:bg-blue-700" 
+    : "bg-gray-100 text-gray-900 hover:bg-gray-200";
 
-  return (
-    <a href={href} className={`${baseStyles} ${variants[variant]}`}>
+  const props = onClick 
+    ? { onClick, type: "button" } 
+    : { href, rel: "noopener noreferrer" };
+
+  return React.createElement(
+    onClick ? 'button' : 'a',
+    { className: `${baseStyles} ${styles}`, ...props },
+    <>
       {children}
       <ChevronRight className="ml-2 h-4 w-4" />
-    </a>
+    </>
   );
 };
 
 const QuizWebsite = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [formStatus, setFormStatus] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setFormStatus('Since this is a static site, the form is not functional. Please use the email link instead.');
+    setTimeout(() => setFormStatus(''), 5000);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm">
+      <nav className="bg-white shadow">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <img src="/api/placeholder/48/48" alt="Logo" className="h-8 w-8 rounded-full" />
-              <span className="ml-3 text-xl font-semibold text-gray-900">Quiz Informals</span>
+              <img 
+                src="SHOWDOWN QUIZ.png" 
+                alt="Showdown Quiz Logo" 
+                className="h-12 w-auto"
+              />
+              <span className="text-xl font-bold text-gray-900 ml-2">Quiz Informals</span>
             </div>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8">
+            <div className="hidden md:flex space-x-4">
               <NavLink href="#home">Home</NavLink>
               <NavLink href="#about">About</NavLink>
               <NavLink href="#services">Services</NavLink>
@@ -61,50 +77,55 @@ const QuizWebsite = () => {
             </div>
 
             {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-500 hover:text-gray-600">
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden text-gray-500 hover:text-gray-600"
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
           </div>
-        </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <a href="#home" className="block px-3 py-2 text-gray-600 hover:text-blue-600">Home</a>
-              <a href="#about" className="block px-3 py-2 text-gray-600 hover:text-blue-600">About</a>
-              <a href="#services" className="block px-3 py-2 text-gray-600 hover:text-blue-600">Services</a>
-              <a href="#contact" className="block px-3 py-2 text-gray-600 hover:text-blue-600">Contact</a>
+          {/* Mobile Navigation */}
+          {isMenuOpen && (
+            <div className="md:hidden py-2">
+              <NavLink href="#home">Home</NavLink>
+              <NavLink href="#about">About</NavLink>
+              <NavLink href="#services">Services</NavLink>
+              <NavLink href="#contact">Contact</NavLink>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </nav>
 
       {/* Hero Section */}
-      <div className="bg-white">
-        <div className="max-w-4xl mx-auto px-4 py-16 sm:py-24">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl">
-              Welcome to Showdown Quiz Informals
-            </h1>
-            <p className="mt-6 text-xl text-gray-500">
-              Join our community of quiz enthusiasts and embrace the joy of learning through interactive quizzes
-            </p>
-            <div className="mt-8 flex justify-center space-x-4">
-              <Button href="#services">Explore Services</Button>
-              <Button href="#contact" variant="secondary">Join Community</Button>
-            </div>
+      <section id="home" className="bg-white">
+        <div className="max-w-4xl mx-auto px-4 py-16 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            Welcome to Showdown Quiz Informals
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            Join our community of quiz enthusiasts and embrace the joy of learning through interactive quizzes
+          </p>
+          <div className="flex flex-col md:flex-row justify-center gap-4">
+            <Button href="#services">Explore Services</Button>
+            <Button href="#contact" variant="secondary">Join Community</Button>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* About Section */}
       <Section title="Our Story" id="about" className="bg-gray-50">
-        <div className="prose prose-lg">
-          <p className="text-gray-600">
-            Showdown Quiz Informals was born during the unprecedented times of the COVID-19 pandemic when the world shifted to virtual spaces. Founded by Aadil Muhammed Syed, what began as a single event titled "Showdown in Lockdown" garnered overwhelming response and enthusiasm from participants, naturally evolving into a sustained initiative of knowledge sharing and intellectual engagement.
+        <div className="text-lg text-gray-600">
+          <p className="mb-4">
+            Showdown Quiz Informals was born during the unprecedented times of the COVID-19 pandemic when the world shifted to virtual spaces. Founded by Aadil Muhammed Syed, what began as a single event titled "Showdown in Lockdown" garnered overwhelming response and enthusiasm from participants.
+          </p>
+          <p>
+            This initiative has naturally evolved into a sustained platform for knowledge sharing and intellectual engagement, bringing together quiz enthusiasts from various backgrounds.
           </p>
         </div>
       </Section>
@@ -116,7 +137,9 @@ const QuizWebsite = () => {
             <p className="text-gray-600 mb-4">
               Join our active WhatsApp community for regular quiz sessions, daily facts, and engaging discussions.
             </p>
-            <Button href="#">Join Group <MessageCircle className="ml-2 h-4 w-4" /></Button>
+            <Button href="#contact">
+              Join Group <MessageCircle className="ml-2 h-4 w-4" />
+            </Button>
           </Card>
 
           <Card title="Quiz Archive">
@@ -134,7 +157,7 @@ const QuizWebsite = () => {
       <Section title="Get in Touch" id="contact" className="bg-gray-50">
         <div className="grid md:grid-cols-2 gap-8">
           <div>
-            <h3 className="text-xl font-semibold mb-4">Contact Information</h3>
+            <h3 className="text-xl font-bold mb-4">Contact Information</h3>
             <div className="space-y-4">
               <p className="flex items-center text-gray-600">
                 <Mail className="h-5 w-5 mr-2" />
@@ -147,20 +170,38 @@ const QuizWebsite = () => {
             </div>
           </div>
           
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-              <input type="text" id="name" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+              <input 
+                type="text" 
+                id="name" 
+                required
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+              />
             </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-              <input type="email" id="email" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+              <input 
+                type="email" 
+                id="email" 
+                required
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+              />
             </div>
             <div>
               <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-              <textarea id="message" rows="4" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+              <textarea 
+                id="message" 
+                rows="4" 
+                required
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+              ></textarea>
             </div>
-            <Button variant="primary">Send Message</Button>
+            <Button onClick={handleSubmit}>Send Message</Button>
+            {formStatus && (
+              <p className="text-sm text-gray-600 mt-2">{formStatus}</p>
+            )}
           </form>
         </div>
       </Section>
